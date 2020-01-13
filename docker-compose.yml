@@ -1,0 +1,32 @@
+version: '3.7'
+services:
+  web:
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - ./code:/var/www/html
+    links:
+      - db
+  db:
+    build: ./Docker/Mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment: 
+      - MYSQL_ROOT_PASSWORD=alldev
+      - MYSQL_USER=alldev
+      - MYSQL_PASSWORD=alldev
+    links: 
+      - pma
+  pma:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_ARBITRARY=1
+      - MYSQL_ROOT_PASSWORD=alldev
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=alldev
